@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Controlling the lexer - </title>
+        <title>LALRPOP's lexer generator - </title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,7 +77,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_controlling_lexer.html" class="active"><strong aria-hidden="true">4.4.</strong> Controlling the lexer</a></li><li><a href="tutorial/005_full_expressions.html"><strong aria-hidden="true">4.5.</strong> Handling full expressions</a></li><li><a href="tutorial/006_building_asts.html"><strong aria-hidden="true">4.6.</strong> Building ASTs</a></li><li><a href="tutorial/007_macros.html"><strong aria-hidden="true">4.7.</strong> Macros</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Writing a custom lexer</a></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_full_expressions.html"><strong aria-hidden="true">4.4.</strong> Handling full expressions</a></li><li><a href="tutorial/005_building_asts.html"><strong aria-hidden="true">4.5.</strong> Building ASTs</a></li><li><a href="tutorial/006_macros.html"><strong aria-hidden="true">4.6.</strong> Macros</a></li><li><a href="tutorial/007_fallible_actions.html"><strong aria-hidden="true">4.7.</strong> Fallible actions</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li><li><a href="tutorial/009_state_parameter.html"><strong aria-hidden="true">4.9.</strong> Passing state parameter</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Controlling the lexer</a></li><li><ol class="section"><li><a href="lexer_tutorial/001_lexer_gen.html" class="active"><strong aria-hidden="true">5.1.</strong> LALRPOP's lexer generator</a></li><li><a href="lexer_tutorial/002_writing_custom_lexer.html"><strong aria-hidden="true">5.2.</strong> Writing a custom lexer</a></li><li><a href="lexer_tutorial/003_token_references.html"><strong aria-hidden="true">5.3.</strong> Using tokens with references</a></li></ol></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -123,7 +123,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="tutorial/004_controlling_lexer.html#controlling-the-lexer" id="controlling-the-lexer"><h1>Controlling the lexer</h1></a>
+                        <a class="header" href="lexer_tutorial/001_lexer_gen.html#lalrpops-lexer-generator" id="lalrpops-lexer-generator"><h1>LALRPOP's lexer generator</h1></a>
 <p>This example dives a bit deeper into how LALRPOP works. In particular,
 it dives into the meaning of those strings and regular expression that
 we used in the previous tutorial, and how they are used to process the
@@ -131,11 +131,11 @@ input string (a process which you can control). This first step of
 breaking up the input using regular expressions is often called
 <strong>lexing</strong> or <strong>tokenizing</strong>.</p>
 <p>If you're comfortable with the idea of a lexer or tokenizer, you may
-wish to skip ahead to the <a href="tutorial/004_controlling_lexer.html#calculator3">calculator3</a> example, which covers
+wish to skip ahead to the <a href="lexer_tutorial/001_lexer_gen.html#calculator3">calculator3</a> example, which covers
 parsing bigger expressions, and come back here only when you find you
 want more control. You may also be interested in the
-<a href="lexer_tutorial/index.html">tutorial on writing a custom lexer</a>.</p>
-<a class="header" href="tutorial/004_controlling_lexer.html#terminals-vs-nonterminals" id="terminals-vs-nonterminals"><h4>Terminals vs nonterminals</h4></a>
+<a href="index.md">tutorial on writing a custom lexer</a>.</p>
+<a class="header" href="lexer_tutorial/001_lexer_gen.html#terminals-vs-nonterminals" id="terminals-vs-nonterminals"><h4>Terminals vs nonterminals</h4></a>
 <p>You may have noticed that our grammar included two distinct kinds of
 symbols. There were the nonterminals, <code>Term</code> and <code>Num</code>, which we
 defined by specifying a series of symbols that they must match, along
@@ -214,7 +214,7 @@ would happily tokenize a string like this one, which doesn't fit our grammar:</p
 <p>When these tokens are fed into the <strong>parser</strong>, it would notice that we
 have one left paren but then two numbers (<code>r&quot;[0-9]+&quot;</code> terminals), and
 hence report an error.</p>
-<a class="header" href="tutorial/004_controlling_lexer.html#precedence-of-fixed-strings" id="precedence-of-fixed-strings"><h4>Precedence of fixed strings</h4></a>
+<a class="header" href="lexer_tutorial/001_lexer_gen.html#precedence-of-fixed-strings" id="precedence-of-fixed-strings"><h4>Precedence of fixed strings</h4></a>
 <p>Terminals in LALRPOP can be specified (by default) in two ways. As a
 fixed string (like <code>&quot;(&quot;</code>) or a regular expression (like
 <code>r[0-9]+</code>). There is actually an important difference: if, at some
@@ -252,11 +252,11 @@ fn calculator2b() {
     assert_eq!(result, &quot;222&quot;);
 }
 #}</code></pre></pre>
-<a class="header" href="tutorial/004_controlling_lexer.html#ambiguities-between-regular-expressions" id="ambiguities-between-regular-expressions"><h4>Ambiguities between regular expressions</h4></a>
+<a class="header" href="lexer_tutorial/001_lexer_gen.html#ambiguities-between-regular-expressions" id="ambiguities-between-regular-expressions"><h4>Ambiguities between regular expressions</h4></a>
 <p>In the previous section, we saw that fixed strings have precedence
 over regular expressions. But what if we have two regular expressions
 that can match the same input? Which one wins? For example, consider
-this various of the grammar above, where we also try to support
+this variation of the grammar above, where we also try to support
 parenthesized <strong>identifiers</strong> like <code>((foo22))</code>:</p>
 <pre><code>pub Term = {
     Num,
@@ -287,7 +287,7 @@ will not be considered to match, for better or worse). And anyway it's
 not always convenient to make your regular expressions completely
 disjoint like that. Another option is to use a <code>match</code> declaration,
 which lets you control the precedence between regular expressions.</p>
-<a class="header" href="tutorial/004_controlling_lexer.html#simple-match-declarations" id="simple-match-declarations"><h4>Simple <code>match</code> declarations</h4></a>
+<a class="header" href="lexer_tutorial/001_lexer_gen.html#simple-match-declarations" id="simple-match-declarations"><h4>Simple <code>match</code> declarations</h4></a>
 <p>A <code>match</code> declaration lets you explicitly give the precedence between
 terminals. In its simplest form, it consists of just ordering regular
 expressions and string literals into groups, with the higher
@@ -300,7 +300,7 @@ and otherwise consider it to be an identifier.</p>
 } else {
     r&quot;\w+&quot;,
     _
-}    
+}
 </code></pre>
 <p>Here the match contains two levels; each level can have more than one
 item in it. The top-level contains only <code>r&quot;[0-9]+&quot;</code>, which means that this
@@ -329,7 +329,7 @@ fn calculator2b() {
 
     let result = calculator2b::TermParser::new().parse(&quot;(foo33)&quot;).unwrap();
     assert_eq!(result, &quot;Id(foo33)&quot;);
-    
+
     // This one will fail:
 
     let result = calculator2b::TermParser::new().parse(&quot;(22)&quot;).unwrap();
@@ -348,7 +348,7 @@ our <code>match</code> to mention <code>22</code> explicitly:</p>
 } else {
     r&quot;\w+&quot;,
     _
-}    
+}
 </code></pre>
 <p>This raises the interesting question of what the precedence is <strong>within</strong>
 a match rung -- after all, both the regex and <code>&quot;22&quot;</code> can match the same
@@ -356,9 +356,9 @@ string. The answer is that within a match rung, fixed literals get precedence
 over regular expressions, just as before, and all regular expressions
 must not overlap.</p>
 <p>With this new <code>match</code> declaration, we will find that our tests all pass.</p>
-<a class="header" href="tutorial/004_controlling_lexer.html#renaming-match-declarations" id="renaming-match-declarations"><h4>Renaming <code>match</code> declarations</h4></a>
+<a class="header" href="lexer_tutorial/001_lexer_gen.html#renaming-match-declarations" id="renaming-match-declarations"><h4>Renaming <code>match</code> declarations</h4></a>
 <p>There is one final twist before we reach the
-<a href="calculator/src/calculator2b.lalrpop">final version of our example that you will find in the repository</a>. We
+<a href="../../calculator/src/calculator2b.lalrpop">final version of our example that you will find in the repository</a>. We
 can also use <code>match</code> declarations to give names to regular
 expressions, so that we don't have to type them directly in our
 grammar. For example, maybe instead of writing <code>r&quot;\w+&quot;</code>, we would
@@ -383,7 +383,7 @@ so:</p>
 <p>In fact, the match declaration can map a regular expression to any
 kind of symbol you want (i.e., you can also map to a string literal or
 even a regular expression). Whatever symbol appears after the <code>=&gt;</code> is
-what you should use in your grammar. As an example, in some languages
+what you should use in your grammar. As an example, some languages
 have case-insensitive keywords; if you wanted to write <code>&quot;BEGIN&quot;</code> in the
 grammar itself, but have that map to a regular expression in the lexer, you might write:</p>
 <pre><code>match {
@@ -393,19 +393,28 @@ grammar itself, but have that map to a regular expression in the lexer, you migh
 </code></pre>
 <p>And now any reference in your grammar to <code>&quot;BEGIN&quot;</code> will actually match
 any capitalization.</p>
+<a class="header" href="lexer_tutorial/001_lexer_gen.html#customizing-skipping-between-tokens" id="customizing-skipping-between-tokens"><h4>Customizing skipping between tokens</h4></a>
+<p>If we want to support comments we will need to skip more than just whitespace in our lexer.
+To this end <code>ignore patterns</code> can be specified.</p>
+<pre><code>match {
+    r&quot;\s*&quot; =&gt; { }, // The default whitespace skipping is disabled an `ignore pattern` is specified
+    r&quot;//[^\n\r]*[\n\r]*&quot; =&gt; { }, // Skip `// comments`
+    r&quot;/\*([^\*]*\*+[^\*/])*([^\*]*\*+|[^\*])*\*/&quot; =&gt; { },  // Skip `/* comments */`
+}
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="tutorial/003_type_inference.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="lexer_tutorial/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="tutorial/005_full_expressions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="lexer_tutorial/002_writing_custom_lexer.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -417,13 +426,13 @@ any capitalization.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="tutorial/003_type_inference.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="lexer_tutorial/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="tutorial/005_full_expressions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="lexer_tutorial/002_writing_custom_lexer.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

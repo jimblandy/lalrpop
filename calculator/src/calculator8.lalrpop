@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use crate::ast::{Expr, Opcode};
 
-grammar;
+grammar(scale: i32);
 
 pub Expr: Box<Expr> = { // (1)
     Expr ExprOp Factor => Box::new(Expr::Op(<>)), // (2)
@@ -29,6 +29,6 @@ Term: Box<Expr> = {
 };
 
 Num: i32 = {
-    r"[0-9]+" => i32::from_str(<>).unwrap()
+    r"[0-9]+" => i32::from_str(<>).unwrap()*scale,
 };
 

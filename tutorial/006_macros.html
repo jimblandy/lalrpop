@@ -77,7 +77,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_controlling_lexer.html"><strong aria-hidden="true">4.4.</strong> Controlling the lexer</a></li><li><a href="tutorial/005_full_expressions.html"><strong aria-hidden="true">4.5.</strong> Handling full expressions</a></li><li><a href="tutorial/006_building_asts.html"><strong aria-hidden="true">4.6.</strong> Building ASTs</a></li><li><a href="tutorial/007_macros.html" class="active"><strong aria-hidden="true">4.7.</strong> Macros</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Writing a custom lexer</a></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_full_expressions.html"><strong aria-hidden="true">4.4.</strong> Handling full expressions</a></li><li><a href="tutorial/005_building_asts.html"><strong aria-hidden="true">4.5.</strong> Building ASTs</a></li><li><a href="tutorial/006_macros.html" class="active"><strong aria-hidden="true">4.6.</strong> Macros</a></li><li><a href="tutorial/007_fallible_actions.html"><strong aria-hidden="true">4.7.</strong> Fallible actions</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li><li><a href="tutorial/009_state_parameter.html"><strong aria-hidden="true">4.9.</strong> Passing state parameter</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Controlling the lexer</a></li><li><ol class="section"><li><a href="lexer_tutorial/001_lexer_gen.html"><strong aria-hidden="true">5.1.</strong> LALRPOP's lexer generator</a></li><li><a href="lexer_tutorial/002_writing_custom_lexer.html"><strong aria-hidden="true">5.2.</strong> Writing a custom lexer</a></li><li><a href="lexer_tutorial/003_token_references.html"><strong aria-hidden="true">5.3.</strong> Using tokens with references</a></li></ol></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -123,7 +123,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="tutorial/007_macros.html#macros" id="macros"><h1>Macros</h1></a>
+                        <a class="header" href="tutorial/006_macros.html#macros" id="macros"><h1>Macros</h1></a>
 <p>Frequently when writing grammars we encounter repetitive constructs
 that we would like to copy-and-paste. A common example is defining
 something like a &quot;comma-separated list&quot;. Imagine we wanted to parse a
@@ -151,10 +151,10 @@ nonterminal.  This lets you write things like <code>(&lt;Expr&gt; &quot;,&quot;)
 an &quot;optionally parse an <code>Expr</code> followed by a comma&quot;. Note the angle
 brackets around <code>Expr</code>: these ensures that the value of the <code>(&lt;Expr&gt; &quot;,&quot;)</code> is the value of the expression, and not a tuple of the
 expression and the comma. This means that <code>(&lt;Expr&gt; &quot;,&quot;)?</code> would have
-the type type <code>Option&lt;Box&lt;Expr&gt;&gt;</code> (and not <code>Option&lt;(Box&lt;Expr&gt;, &amp;'input str)&gt;</code>).</p>
+the type <code>Option&lt;Box&lt;Expr&gt;&gt;</code> (and not <code>Option&lt;(Box&lt;Expr&gt;, &amp;'input str)&gt;</code>).</p>
 <p>Using these operations we can define <code>Exprs</code> in terms of a macro
 <code>Comma&lt;T&gt;</code> that creates a comma-separated list of <code>T</code>, whatever <code>T</code> is
-(this definition appears in <a href="calculator/src/calculator5.lalrpop">calculator5</a>):</p>
+(this definition appears in <a href="../../calculator/src/calculator5.lalrpop">calculator5</a>):</p>
 <pre><code class="language-lalrpop">pub Exprs = Comma&lt;Expr&gt;; // (0)
 
 Comma&lt;T&gt;: Vec&lt;T&gt; = { // (1)
@@ -188,7 +188,7 @@ means the Rust code has two variables available to it, <code>v: Vec&lt;T&gt;</co
 <code>e: Option&lt;T&gt;</code>. The action code itself should then be fairly clear --
 if <code>e</code> is <code>Some</code>, it appends it to the vector and returns the result.</p>
 <p>As another example of using macros, you may recall the precedence
-tiers we saw in <a href="calculator/src/calculator4.lalrpop">calculator4</a> (<code>Expr</code>, <code>Factor</code>, etc), which had a
+tiers we saw in <a href="../../calculator/src/calculator4.lalrpop">calculator4</a> (<code>Expr</code>, <code>Factor</code>, etc), which had a
 sort of repetitive structure. You could factor that out using a
 macro. In this case, it's a recursive macro:</p>
 <pre><code class="language-lalrpop">Tier&lt;Op,NextTier&gt;: Box&lt;Expr&gt; = {
@@ -209,7 +209,7 @@ FactorOp: Opcode = {
     &quot;/&quot; =&gt; Opcode::Div,
 };
 </code></pre>
-<p>And, of course, we have to add some tests to <a href="calculator/src/main.rs">main.rs file</a>:</p>
+<p>And, of course, we have to add some tests to <a href="../../calculator/src/main.rs">main.rs file</a>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -249,13 +249,13 @@ fn calculator5() {
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="tutorial/006_building_asts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="tutorial/005_building_asts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="tutorial/008_error_recovery.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="tutorial/007_fallible_actions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -267,13 +267,13 @@ fn calculator5() {
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="tutorial/006_building_asts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="tutorial/005_building_asts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="tutorial/008_error_recovery.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="tutorial/007_fallible_actions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

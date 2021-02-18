@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Error recovery - </title>
+        <title>Fallible actions - </title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,7 +77,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_full_expressions.html"><strong aria-hidden="true">4.4.</strong> Handling full expressions</a></li><li><a href="tutorial/005_building_asts.html"><strong aria-hidden="true">4.5.</strong> Building ASTs</a></li><li><a href="tutorial/006_macros.html"><strong aria-hidden="true">4.6.</strong> Macros</a></li><li><a href="tutorial/007_fallible_actions.html"><strong aria-hidden="true">4.7.</strong> Fallible actions</a></li><li><a href="tutorial/008_error_recovery.html" class="active"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li><li><a href="tutorial/009_state_parameter.html"><strong aria-hidden="true">4.9.</strong> Passing state parameter</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Controlling the lexer</a></li><li><ol class="section"><li><a href="lexer_tutorial/001_lexer_gen.html"><strong aria-hidden="true">5.1.</strong> LALRPOP's lexer generator</a></li><li><a href="lexer_tutorial/002_writing_custom_lexer.html"><strong aria-hidden="true">5.2.</strong> Writing a custom lexer</a></li><li><a href="lexer_tutorial/003_token_references.html"><strong aria-hidden="true">5.3.</strong> Using tokens with references</a></li></ol></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_full_expressions.html"><strong aria-hidden="true">4.4.</strong> Handling full expressions</a></li><li><a href="tutorial/005_building_asts.html"><strong aria-hidden="true">4.5.</strong> Building ASTs</a></li><li><a href="tutorial/006_macros.html"><strong aria-hidden="true">4.6.</strong> Macros</a></li><li><a href="tutorial/007_fallible_actions.html" class="active"><strong aria-hidden="true">4.7.</strong> Fallible actions</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li><li><a href="tutorial/009_state_parameter.html"><strong aria-hidden="true">4.9.</strong> Passing state parameter</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Controlling the lexer</a></li><li><ol class="section"><li><a href="lexer_tutorial/001_lexer_gen.html"><strong aria-hidden="true">5.1.</strong> LALRPOP's lexer generator</a></li><li><a href="lexer_tutorial/002_writing_custom_lexer.html"><strong aria-hidden="true">5.2.</strong> Writing a custom lexer</a></li><li><a href="lexer_tutorial/003_token_references.html"><strong aria-hidden="true">5.3.</strong> Using tokens with references</a></li></ol></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -123,87 +123,132 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="tutorial/008_error_recovery.html#error-recovery" id="error-recovery"><h1>Error recovery</h1></a>
-<p>By default, the parser will stop as soon as it encounters an error.
-Sometimes though we would like to try and recover and keep going.
-LALRPOP can support this, but you have to help it by defining various
-&quot;error recovery&quot; points in your grammar. This is done by using a
-special <code>!</code> token: this token only occurs when the parser
-encounters an error in the input. When an error does occur, the parser
-will try to recover and keep going; it does this by injecting the
-<code>!</code> token into the stream, executing any actions that it can, and
-then dropping input tokens until it finds something that lets it
-continue.</p>
-<p>Let's see how we can use error recovery to attempt to find multiple
-errors during parsing. First we need a way to return multiple errors
-as this is not something that LALRPOP does by itself so we add a <code>Vec</code>
-storing the errors we found during parsing. Since the result of <code>!</code>
-contains a token, error recovery requires that tokens can be cloned.</p>
-<pre><code>grammar&lt;'err&gt;(errors: &amp;'err mut Vec&lt;ErrorRecovery&lt;usize, (usize, &amp;'input str), ()&gt;&gt;);
-</code></pre>
-<p>Since an alternative containing <code>!</code> is expected to return the same type of
-value as the other alternatives in the production we add an extra variant to
-<code>Expr</code> to indicate that an error was found.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-pub enum Expr {
-    Number(i32),
-    Op(Box&lt;Expr&gt;, Opcode, Box&lt;Expr&gt;),
-    Error,
-}
-#}</code></pre></pre>
-<p>Finally we modify the grammar, adding a third alternative containing <code>!</code>
-which simply stores the <code>ErrorRecovery</code> value received from <code>!</code> in <code>errors</code> and
-returns an <code>Expr::Error</code>. The value of the error token will be a <a href="https://docs.rs/lalrpop-util/0.12.1/lalrpop_util/enum.ParseError.html"><code>ParseError</code>
-value</a>.</p>
-<pre><code class="language-lalrpop">Term: Box&lt;Expr&gt; = {
-    Num =&gt; Box::new(Expr::Number(&lt;&gt;)),
-    &quot;(&quot; &lt;Expr&gt; &quot;)&quot;,
-    ! =&gt; { errors.push(&lt;&gt;); Box::new(Expr::Error) },
+                        <a class="header" href="tutorial/007_fallible_actions.html#returning-errors-from-actions" id="returning-errors-from-actions"><h1>Returning errors from actions</h1></a>
+<p>Sometimes it can be useful to have action code that is able to return an error
+instead of being expected to produce a value of type <code>T</code> directly. This happens
+because we usually cannot reject all invalid input just by using grammar rules,
+or rather, the work to do so would be too much.</p>
+<p>Even in our calculator example, you can see that we're &quot;cheating&quot; the system:
+Our grammar accepts an unlimited number of digits in the input, but the result
+is parsed as a <code>i32</code>. This is an issue because the maximum number that <code>i32</code>
+can represent is 2147483647. Try giving it a bigger number and it will panic
+because it always expects the <code>i32</code> conversion to succeed.</p>
+<p>If you are familiar with Rust's error handling story, you might think that we
+can just make <code>Num</code> return an <code>Option&lt;i32&gt;</code> or even <code>Result&lt;i32, ...&gt;</code>, and you
+would be right. However, that is not necessary, because if we look at the type
+of <code>ExprParser::parse()</code>, we can see that it already returns a <code>Result&lt;i32, ParseError&gt;</code>. So the goal is to &quot;hook&quot; into this existing error machinery and
+create action code that can return errors.</p>
+<p>LALRPOP supports this very easily by defining action code with <code>=&gt;?</code> instead of
+<code>=&gt;</code>. The returned value is then assumed to be a <code>Result&lt;T, ParseError&gt;</code>
+instead of a plain <code>T</code>:</p>
+<pre><code class="language-lalrpop">Num: i32 = {
+    r&quot;[0-9]+&quot; =&gt;? i32::from_str(&lt;&gt;)
+        .map_err(|_| ParseError::User {
+            error: &quot;number is too big&quot;
+        })
 };
 </code></pre>
-<p>Now we can add a test that includes various errors (e.g., missing
-operands). You can see that the parser recovered from missing operands
-by inserting this <code>!</code> token where necessary.</p>
+<p>In addition, we have to add <code>use lalrpop_util::ParseError;</code> to the top of the
+file so that we have access to the <code>ParseError</code> type. You can find the full
+source as <a href="../../calculator/src/calculator6.lalrpop"><code>calculator6.lalrpop</code></a>. This allows you to nicely
+handle the errors:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+#[macro_use] extern crate lalrpop_util;
+
+lalrpop_mod!(pub calculator6);
+
 #[test]
-fn calculator7() {
-    let mut errors = Vec::new();
-
-    let expr = calculator7::ExprsParser::new()
-        .parse(&amp;mut errors, &quot;22 * + 3&quot;)
-        .unwrap();
-    assert_eq!(&amp;format!(&quot;{:?}&quot;, expr), &quot;[((22 * error) + 3)]&quot;);
-
-    let expr = calculator7::ExprsParser::new()
-        .parse(&amp;mut errors, &quot;22 * 44 + 66, *3&quot;)
-        .unwrap();
-    assert_eq!(&amp;format!(&quot;{:?}&quot;, expr), &quot;[((22 * 44) + 66), (error * 3)]&quot;);
-
-    let expr = calculator7::ExprsParser::new()
-        .parse(&amp;mut errors, &quot;*&quot;)
-        .unwrap();
-    assert_eq!(&amp;format!(&quot;{:?}&quot;, expr), &quot;[(error * error)]&quot;);
-
-    assert_eq!(errors.len(), 4);
+fn calculator6() {
+    // Number is one bigger than std::i32::MAX
+    let expr = calculator6::ExprsParser::new().parse(&quot;2147483648&quot;);
+    assert!(expr.is_err());
 }
 #}</code></pre></pre>
+<p>No panics!</p>
+<p>You can even go a step further and define your own error type, for example an
+enum with all possible errors. This allows you to distinguish between different
+errors more easily, without relying on strings.</p>
+<p>For that, let's say we want to define two errors: One if the input number was
+too big, and another one if the input number was not even - we're changing the
+calculator to only accept even numbers for now.</p>
+<p>We first define our error enum in <code>main.rs</code>:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum Calculator6Error {
+    InputTooBig,
+    OddNumber,
+}
+#}</code></pre></pre>
+<p>Then we import it into our grammar and tell LALRPOP to use it as the user error
+type, so we change the top of the file to:</p>
+<pre><code class="language-lalrpop">use std::str::FromStr;
+use ast::{Expr, Opcode};
+
+use super::Calculator6Error;
+
+use lalrpop_util::ParseError;
+
+grammar;
+
+extern {
+    type Error = Calculator6Error;
+}
+...
+</code></pre>
+<p>We can also change the rule for <code>Num</code> to make use of our new error:</p>
+<pre><code class="language-lalrpop">Num: i32 = {
+    r&quot;[0-9]+&quot; =&gt;? i32::from_str(&lt;&gt;)
+        .map_err(|_| ParseError::User {
+            error: Calculator6Error::InputTooBig
+        })
+        .and_then(|i| if i % 2 == 0 {
+            Ok(i)
+        } else {
+            Err(ParseError::User {
+                error: Calculator6Error::OddNumber
+            })
+        })
+};
+</code></pre>
+<p>And finally we can see if it works:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[macro_use] extern crate lalrpop_util;
+
+lalrpop_mod!(pub calculator6b);
+
+#[test]
+fn calculator6b() {
+    use lalrpop_util::ParseError;
+
+    let expr = calculator6b::ExprsParser::new().parse(&quot;2147483648&quot;);
+    assert!(expr.is_err());
+    assert_eq!(expr.unwrap_err(), ParseError::User { error: Calculator6Error::InputTooBig });
+
+    let expr = calculator6b::ExprsParser::new().parse(&quot;3&quot;);
+    assert!(expr.is_err());
+    assert_eq!(expr.unwrap_err(), ParseError::User { error: Calculator6Error::OddNumber });
+}
+#}</code></pre></pre>
+<p>There we go! You can find the full grammar in <a href="../../calculator/src/calculator6b.lalrpop"><code>calculator6b.lalrpop</code></a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="tutorial/007_fallible_actions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="tutorial/006_macros.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="tutorial/009_state_parameter.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="tutorial/008_error_recovery.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -215,13 +260,13 @@ fn calculator7() {
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="tutorial/007_fallible_actions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="tutorial/006_macros.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="tutorial/009_state_parameter.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="tutorial/008_error_recovery.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

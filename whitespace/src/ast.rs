@@ -59,9 +59,7 @@ pub struct Program {
 
 impl Program {
     pub fn new(statements: Vec<Stmt>) -> Self {
-        Program {
-            statements: statements,
-        }
+        Program { statements }
     }
 
     pub fn dump(&self) {
@@ -97,14 +95,14 @@ impl<'program> Interpreter<'program> {
                 &Stmt::Push(n) => self.stack.push(n),
 
                 &Stmt::PrintChar => {
-                    let top = try!(self.pop());
-                    let c = try!(num_to_char(top));
+                    let top = self.pop()?;
+                    let c = num_to_char(top)?;
                     print!("{}", c);
                 }
 
                 &Stmt::Exit => return Ok(()),
 
-                other => return Err({ format!("Unimplemented instruction: {:?}", other) }),
+                other => return Err(format!("Unimplemented instruction: {:?}", other)),
             }
 
             pc += 1;

@@ -77,7 +77,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html" class="active"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_controlling_lexer.html"><strong aria-hidden="true">4.4.</strong> Controlling the lexer</a></li><li><a href="tutorial/005_full_expressions.html"><strong aria-hidden="true">4.5.</strong> Handling full expressions</a></li><li><a href="tutorial/006_building_asts.html"><strong aria-hidden="true">4.6.</strong> Building ASTs</a></li><li><a href="tutorial/007_macros.html"><strong aria-hidden="true">4.7.</strong> Macros</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Writing a custom lexer</a></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html" class="active"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_full_expressions.html"><strong aria-hidden="true">4.4.</strong> Handling full expressions</a></li><li><a href="tutorial/005_building_asts.html"><strong aria-hidden="true">4.5.</strong> Building ASTs</a></li><li><a href="tutorial/006_macros.html"><strong aria-hidden="true">4.6.</strong> Macros</a></li><li><a href="tutorial/007_fallible_actions.html"><strong aria-hidden="true">4.7.</strong> Fallible actions</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li><li><a href="tutorial/009_state_parameter.html"><strong aria-hidden="true">4.9.</strong> Passing state parameter</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Controlling the lexer</a></li><li><ol class="section"><li><a href="lexer_tutorial/001_lexer_gen.html"><strong aria-hidden="true">5.1.</strong> LALRPOP's lexer generator</a></li><li><a href="lexer_tutorial/002_writing_custom_lexer.html"><strong aria-hidden="true">5.2.</strong> Writing a custom lexer</a></li><li><a href="lexer_tutorial/003_token_references.html"><strong aria-hidden="true">5.3.</strong> Using tokens with references</a></li></ol></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -124,9 +124,9 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="tutorial/003_type_inference.html#type-inference" id="type-inference"><h1>Type inference</h1></a>
-<p>OK, now that we understand <a href="calculator/src/calculator1.lalrpop">the calculator1 example</a>, let's
+<p>OK, now that we understand <a href="../../calculator/src/calculator1.lalrpop">the calculator1 example</a>, let's
 look at some of the shorthands that LALRPOP offers to make it more concise.
-This code is found in <a href="calculator/src/calculator2.lalrpop">the calculator2 demo</a>.</p>
+This code is found in <a href="../../calculator/src/calculator2.lalrpop">the calculator2 demo</a>.</p>
 <p>To start, let's look at the definition of <code>Term</code> we saw before:</p>
 <pre><code class="language-lalrpop">pub Term: i32 = {
     &lt;n:Num&gt; =&gt; n,
@@ -201,7 +201,7 @@ parsed values match the names of your struct fields.</p>
                         
 
                         
-                            <a rel="next" href="tutorial/004_controlling_lexer.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="tutorial/004_full_expressions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -219,7 +219,7 @@ parsed values match the names of your struct fields.</p>
                 
 
                 
-                    <a href="tutorial/004_controlling_lexer.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="tutorial/004_full_expressions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

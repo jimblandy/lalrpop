@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Adding LALRPOP to your project - </title>
+        <title>Handling full expressions - </title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,7 +77,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html" class="active"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_full_expressions.html"><strong aria-hidden="true">4.4.</strong> Handling full expressions</a></li><li><a href="tutorial/005_building_asts.html"><strong aria-hidden="true">4.5.</strong> Building ASTs</a></li><li><a href="tutorial/006_macros.html"><strong aria-hidden="true">4.6.</strong> Macros</a></li><li><a href="tutorial/007_fallible_actions.html"><strong aria-hidden="true">4.7.</strong> Fallible actions</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li><li><a href="tutorial/009_state_parameter.html"><strong aria-hidden="true">4.9.</strong> Passing state parameter</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Controlling the lexer</a></li><li><ol class="section"><li><a href="lexer_tutorial/001_lexer_gen.html"><strong aria-hidden="true">5.1.</strong> LALRPOP's lexer generator</a></li><li><a href="lexer_tutorial/002_writing_custom_lexer.html"><strong aria-hidden="true">5.2.</strong> Writing a custom lexer</a></li><li><a href="lexer_tutorial/003_token_references.html"><strong aria-hidden="true">5.3.</strong> Using tokens with references</a></li></ol></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> LALRPOP</a></li><li><a href="crash_course.html"><strong aria-hidden="true">2.</strong> Crash course on parsers</a></li><li><a href="quick_start_guide.html"><strong aria-hidden="true">3.</strong> Quick start guide</a></li><li><a href="tutorial/index.html"><strong aria-hidden="true">4.</strong> Tutorial</a></li><li><ol class="section"><li><a href="tutorial/001_adding_lalrpop.html"><strong aria-hidden="true">4.1.</strong> Adding LALRPOP to your project</a></li><li><a href="tutorial/002_paren_numbers.html"><strong aria-hidden="true">4.2.</strong> Parsing parenthesized numbers</a></li><li><a href="tutorial/003_type_inference.html"><strong aria-hidden="true">4.3.</strong> Type inference</a></li><li><a href="tutorial/004_full_expressions.html" class="active"><strong aria-hidden="true">4.4.</strong> Handling full expressions</a></li><li><a href="tutorial/005_building_asts.html"><strong aria-hidden="true">4.5.</strong> Building ASTs</a></li><li><a href="tutorial/006_macros.html"><strong aria-hidden="true">4.6.</strong> Macros</a></li><li><a href="tutorial/007_fallible_actions.html"><strong aria-hidden="true">4.7.</strong> Fallible actions</a></li><li><a href="tutorial/008_error_recovery.html"><strong aria-hidden="true">4.8.</strong> Error recovery</a></li><li><a href="tutorial/009_state_parameter.html"><strong aria-hidden="true">4.9.</strong> Passing state parameter</a></li></ol></li><li><a href="lexer_tutorial/index.html"><strong aria-hidden="true">5.</strong> Controlling the lexer</a></li><li><ol class="section"><li><a href="lexer_tutorial/001_lexer_gen.html"><strong aria-hidden="true">5.1.</strong> LALRPOP's lexer generator</a></li><li><a href="lexer_tutorial/002_writing_custom_lexer.html"><strong aria-hidden="true">5.2.</strong> Writing a custom lexer</a></li><li><a href="lexer_tutorial/003_token_references.html"><strong aria-hidden="true">5.3.</strong> Using tokens with references</a></li></ol></li><li><a href="advanced_setup.html"><strong aria-hidden="true">6.</strong> Advanced setup</a></li><li><ol class="section"><li><a href="generate_in_source.html"><strong aria-hidden="true">6.1.</strong> Generate in source tree</a></li><li class="spacer"></li></ol></li><li><a href="misc/contributors.html">Contributors</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -123,77 +123,87 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="tutorial/001_adding_lalrpop.html#adding-lalrpop-to-your-cargotoml-file" id="adding-lalrpop-to-your-cargotoml-file"><h1>Adding LALRPOP to your <code>Cargo.toml</code> file</h1></a>
-<p>LALRPOP works as a preprocessor that is integrated with cargo. When
-LALRPOP is invoked, it will search your source directory for files
-with the extension <code>lalrpop</code> and create corresponding <code>rs</code> files. So,
-for example, if we have a file <code>calculator.lalrpop</code>, the preprocessor
-will create a Rust file <code>calculator.rs</code>. As an aside, the syntax of
-LALRPOP intentionally hews fairly close to Rust, so it should be
-possible to use the Rust plugin to edit lalrpop files as well, as long
-as it's not too picky (the emacs rust-mode, in particular, works just
-fine).</p>
-<p>To start, let's use <code>cargo new</code> to make a new project. We'll call it
-<code>calculator</code>:</p>
-<pre><code>&gt; cargo new --bin calculator
+                        <a class="header" href="tutorial/004_full_expressions.html#handling-full-expressions" id="handling-full-expressions"><h1>Handling full expressions</h1></a>
+<p>Now we are ready to extend our calculator to cover the full range of
+arithmetic expressions (well, at least the ones you learned in
+elementary school). Here is
+<a href="../../calculator/src/calculator3.lalrpop">the next calculator example, calculator3</a>:</p>
+<pre><code class="language-lalrpop">use std::str::FromStr;
+
+grammar;
+
+pub Expr: i32 = {
+    &lt;l:Expr&gt; &quot;+&quot; &lt;r:Factor&gt; =&gt; l + r,
+    &lt;l:Expr&gt; &quot;-&quot; &lt;r:Factor&gt; =&gt; l - r,
+    Factor,
+};
+
+Factor: i32 = {
+    &lt;l:Factor&gt; &quot;*&quot; &lt;r:Term&gt; =&gt; l * r,
+    &lt;l:Factor&gt; &quot;/&quot; &lt;r:Term&gt; =&gt; l / r,
+    Term,
+};
+
+Term: i32 = {
+    Num,
+    &quot;(&quot; &lt;Expr&gt; &quot;)&quot;,
+};
+
+Num: i32 = {
+    r&quot;[0-9]+&quot; =&gt; i32::from_str(&lt;&gt;).unwrap(),
+};
 </code></pre>
-<p>We now have to edit the generated <a href="../../calculator/Cargo.toml"><code>calculator/Cargo.toml</code></a>
-file to invoke the LALRPOP preprocessor. The resulting file should
-look something like:</p>
-<pre><code>[package]
-name = &quot;calculator&quot;
-version = &quot;0.1.0&quot;
-authors = [&quot;Niko Matsakis &lt;niko@alum.mit.edu&gt;&quot;]
-
-[build-dependencies] # &lt;-- We added this and everything after!
-lalrpop = &quot;0.19.4&quot;
-
-[dependencies]
-lalrpop-util = &quot;0.19.4&quot;
-regex = &quot;1&quot;
+<p>Perhaps the most interesting thing about this example is the way it
+encodes precedence. The idea of precedence of course is that in an
+expression like <code>2+3*4</code>, we want to do the multiplication first, and
+then the addition. LALRPOP doesn't have any built-in features for
+giving precedence to operators, mostly because I consider those to be
+creepy, but it's pretty straightforward to express precedence in your
+grammar by structuring it in tiers -- for example, here we have the
+nonterminal <code>Expr</code>, which covers all expressions. It consists of a series
+of factors that are added or subtracted from one another. A <code>Factor</code>
+is then a series of terms that are multiplied or divided. Finally, a
+<code>Term</code> is either a single number or, using parenthesis, an entire expr.</p>
+<p>Abstracting from this example, the typical pattern for encoding
+precedence is to have one nonterminal per precedence level, where you
+begin with the operators of lowest precedence (<code>+</code>, <code>-</code>), add in the
+next highest precedence level (<code>*</code>, <code>/</code>), and finish with the bare
+&quot;atomic&quot; expressions like <code>Num</code>. Finally, you add in a parenthesized
+version of your top-level as an atomic expression, which lets people
+reset.</p>
+<p>To see why this works, consider the two possible parse trees for
+something like <code>2+3*4</code>:</p>
+<pre><code>2 + 3   *    4          2   +  3   *    4
+| | |   |    |          |   |  |   |    |
+| | +-Factor-+    OR    +-Expr-+   |    |
+| |     |                   |      |    |
++-Expr -+                   +----Factor-+
 </code></pre>
-<p>Cargo can run <a href="https://doc.rust-lang.org/cargo/reference/build-scripts.html">build scripts</a> as a pre-processing step,
-named <code>build.rs</code> by default. The <code>[build-dependencies]</code>
-section specifies the dependencies for build scripts -- in this
-case, just LALRPOP.</p>
-<p>The <code>[dependencies]</code> section describes the dependencies that LALRPOP
-needs at runtime. All LALRPOP parsers require at least the
-<code>lalrpop-util</code> crate. In addition, if you don't want to write the
-lexer by hand, you need to add a dependency on the regex crate. (If
-you don't know what a lexer is, don't worry, it's not important just
-now, though we will cover it in <a href="002_paren_numbers.md">the next section</a>; if you <em>do</em>
-know what a lexer is, and you want to know how to write a lexer by
-hand and use it with LALRPOP, then check out the <a href="../lexer_tutorial/index.md">lexer tutorial</a>.)</p>
-<p>Next we have to add <code>build.rs</code> itself. For those unfamiliar with <a href="https://doc.rust-lang.org/cargo/reference/build-scripts.html">this feature</a>, the <code>build.rs</code> file
-should be placed next to your <code>Cargo.toml</code> file and not inside the <code>src</code> folder with the rest of
-your Rust code. This should just look like the following:</p>
-<pre><pre class="playpen"><code class="language-rust">extern crate lalrpop;
-
-fn main() {
-    lalrpop::process_root().unwrap();
-}
-</code></pre></pre>
-<p>The function <code>process_root</code> processes your <code>src</code> directory, converting
-all <code>lalrpop</code> files into <code>rs</code> files. It is smart enough to check
-timestamps and do nothing if the <code>rs</code> file is newer than the <code>lalrpop</code>
-file, and to mark the generated <code>rs</code> file as read-only. It returns an
-<code>io::Result&lt;()&gt;</code>, so the <code>unwrap()</code> call just asserts that no
-file-system errors occurred.</p>
-<p><em>NOTE:</em> On Windows, the necessary APIs are not yet stable, so
-timestamp checking is disabled.</p>
+<p>In the first one, we give multiplication higher precedence, and in the
+second one, we (incorrectly) give addition higher precedence. If you
+look at the grammar now, you can see that the second one is
+impossible: a <code>Factor</code> cannot have an <code>Expr</code> as its left-hand side.
+This is the purpose of the tiers: to force the parser into the
+precedence you want.</p>
+<p>Finally, note that we only write <code>pub</code> before the nonterminal we're
+interested in parsing (<code>Expr</code>) and not any of the helpers. Nonterminals
+marked <code>pub</code> have extra code generated, like the <code>new()</code> method used to
+access the parser from other modules. If you get a warning about an
+unused <code>new()</code> method on <code>FooParser</code>, drop the <code>pub</code> from nonterminal
+<code>Foo</code>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="tutorial/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="tutorial/003_type_inference.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="tutorial/002_paren_numbers.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="tutorial/005_building_asts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -205,13 +215,13 @@ timestamp checking is disabled.</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="tutorial/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="tutorial/003_type_inference.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="tutorial/002_paren_numbers.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="tutorial/005_building_asts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
